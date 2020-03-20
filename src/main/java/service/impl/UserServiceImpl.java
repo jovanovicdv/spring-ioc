@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,13 @@ import service.UserService;
 @Component(value = "userService")
 public class UserServiceImpl implements UserService {
 	
+	@Autowired
+	@Qualifier(value = "userLinkedListDao")
+	private  UserDao userDaoLinked;
 	
-	private  UserDao userDao;
+	@Autowired
+	@Qualifier(value = "userArrayListDao")
+	private  UserDao userDaoArray;
 	
 	
 	
@@ -26,21 +32,18 @@ public class UserServiceImpl implements UserService {
 	public void save(User user, String type) {
 		BeanFactory container = new AnnotationConfigApplicationContext(MyConfig.class);
 		if (Objects.equals(type, "array")) {
-			userDao = container.getBean("userArrayListDao", UserDao.class);
-			System.out.println(userDao.getClass().getCanonicalName());
-			userDao.save(user);
+			System.out.println(userDaoArray.getClass().getCanonicalName());
+			userDaoArray.save(user);
 		}
 		
 		if (Objects.equals(type, "linked")) {
-			userDao = container.getBean("userLinkedListDao", UserDao.class);
-			System.out.println(userDao.getClass().getCanonicalName());
-			userDao.save(user);
+			System.out.println(userDaoLinked.getClass().getCanonicalName());
+			userDaoLinked.save(user);
 		}
-		((AnnotationConfigApplicationContext)container).close();
 	}
 
 	public void print() {
-		userDao.print();
+		userDaoArray.print();
 	}
 	/*
 	@Autowired
