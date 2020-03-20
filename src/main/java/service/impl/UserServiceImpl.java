@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
 
 
 	public void save(User user, String type) {
-		BeanFactory container = new AnnotationConfigApplicationContext(MyConfig.class);
 		if (Objects.equals(type, "array")) {
 			System.out.println(userDaoArray.getClass().getCanonicalName());
 			userDaoArray.save(user);
